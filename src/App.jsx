@@ -1,8 +1,10 @@
 /* eslint-disable react/jsx-key */
 import { useRef, useState } from 'react';
 
+import { v4 as uuidv4 } from 'uuid';
+
 export default function App() {
-  const [items, setItems] = useState(['an item']);
+  const [items, setItems] = useState([]);
   const inputRef = useRef();
 
   function onSubmit(e) {
@@ -10,28 +12,44 @@ export default function App() {
 
     const value = inputRef.current.value;
     if (value === '') return;
+
     setItems((prev) => {
-      return [...prev, value];
+      const newItem = {
+        id: uuidv4(),
+        text: value,
+      };
+
+      return [...prev, newItem];
     });
+
     inputRef.current.value = '';
   }
 
   return (
-    <div>
-      Searct:
-      <input type='search' />
-      <br />
-      <br />
+    <div className='bg-teal-100 min-h-dvh flex flex-col gap-2 items-center justify-center'>
+      <div>
+        <label htmlFor='search'>Searct:</label>{' '}
+        <input type='search' id='search' />
+      </div>
       <form onSubmit={onSubmit}>
-        New Item: <input ref={inputRef} type='text' />
+        <div>
+          <label htmlFor='input'>New Item:</label>{' '}
+          <input ref={inputRef} id='input' type='text' />
+        </div>
         <button type='submit'>Add</button>
       </form>
+
       <h3>Items:</h3>
-      <ul>
-        {items.map((item, index) => (
-          <li key={index}>{item}</li>
-        ))}
-      </ul>
+
+      {items.length === 0 ? (
+        <p>There is no item in your list, Please add some item.</p>
+      ) : (
+        <ul>
+          {items.map((item) => (
+            <li key={item.id}>{item.text}</li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
