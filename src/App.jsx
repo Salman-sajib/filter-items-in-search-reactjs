@@ -11,6 +11,7 @@ export default function App() {
     e.preventDefault();
 
     const value = inputRef.current.value;
+
     if (value === '') return;
 
     setItems((prev) => {
@@ -26,30 +27,55 @@ export default function App() {
   }
 
   return (
-    <div className='bg-teal-100 min-h-dvh flex flex-col gap-2 items-center justify-center'>
-      <div>
-        <label htmlFor='search'>Searct:</label>{' '}
-        <input type='search' id='search' />
-      </div>
-      <form onSubmit={onSubmit}>
+    <div className='bg-zinc-900 min-h-dvh flex items-center justify-center'>
+      <div className='bg-stone-200 max-w-[350px] mx-2 flex flex-col gap-2 px-8 py-16 rounded-lg'>
+        <h1 className='text-center font-bold text-xl'>Search Item</h1>
         <div>
-          <label htmlFor='input'>New Item:</label>{' '}
-          <input ref={inputRef} id='input' type='text' />
+          <label htmlFor='search'>Search:</label>{' '}
+          <input
+            type='search'
+            id='search'
+            autoComplete='off'
+            className='p-2 rounded bg-transparent border-2 border-green-500'
+          />
         </div>
-        <button type='submit'>Add</button>
-      </form>
-
-      <h3>Items:</h3>
-
-      {items.length === 0 ? (
-        <p>There is no item in your list, Please add some item.</p>
-      ) : (
-        <ul>
-          {items.map((item) => (
-            <li key={item.id}>{item.text}</li>
-          ))}
-        </ul>
-      )}
+        <h1 className='text-center font-bold text-xl mt-8'>Add Some Item</h1>
+        <form onSubmit={onSubmit}>
+          <div>
+            <label htmlFor='input'>New Item:</label>{' '}
+            <input
+              ref={inputRef}
+              id='input'
+              type='text'
+              autoComplete='off'
+              className='p-2 rounded bg-transparent border-2 border-green-500'
+            />
+          </div>
+          <button
+            type='submit'
+            className='bg-lime-500 w-full px-4 py-2 rounded mt-2 font-bold'
+          >
+            ADD
+          </button>
+        </form>
+        <h3>Items:</h3>
+        {items.length === 0 ? (
+          <p className='text-violet-500'>
+            There is no item in your list, Please add some item.
+          </p>
+        ) : (
+          <ul className='flex flex-wrap gap-2'>
+            {items.map((item) => (
+              <li
+                key={item.id}
+                className='bg-blue-800 text-white px-3 py-2 rounded-full '
+              >
+                {item.text}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 }
