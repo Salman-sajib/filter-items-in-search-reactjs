@@ -26,6 +26,28 @@ export default function App() {
     inputRef.current.value = '';
   }
 
+  function onChange(e) {
+    const value = e.target.value;
+
+    // setItems((prev) => {
+    //   return prev.filter((item) => {
+    //     return item.text.toLowerCase().includes(value.toLowerCase());
+    //   });
+    // });
+
+    {
+      /* writeing the above code in only
+    one statement, remove the curly braces and 
+  return keyword */
+    }
+
+    setItems((prev) =>
+      prev.filter((item) =>
+        item.text.toLowerCase().includes(value.toLowerCase())
+      )
+    );
+  }
+
   return (
     <div className='bg-zinc-900 min-h-dvh flex items-center justify-center'>
       <div className='bg-stone-200 max-w-[350px] mx-2 flex flex-col gap-2 px-8 py-16 rounded-lg'>
@@ -33,13 +55,14 @@ export default function App() {
         <div>
           <label htmlFor='search'>Search:</label>{' '}
           <input
+            onChange={onChange}
             type='search'
             id='search'
             autoComplete='off'
             className='p-2 rounded bg-transparent border-2 border-green-500'
           />
         </div>
-        <h1 className='text-center font-bold text-xl mt-8'>Add Some Item</h1>
+        <h1 className='text-center font-bold text-xl mt-8'>Add Item</h1>
         <form onSubmit={onSubmit}>
           <div>
             <label htmlFor='input'>New Item:</label>{' '}
