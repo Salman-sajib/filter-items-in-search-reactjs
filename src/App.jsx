@@ -1,19 +1,24 @@
 /* eslint-disable react/jsx-key */
-import { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 
 import { v4 as uuidv4 } from 'uuid';
 
 export default function App() {
   const [items, setItems] = useState([]);
+  const [query, setQuery] = useState('');
   const inputRef = useRef();
+
+  const filteredItems = useMemo(() => {
+    return items.filter((item) => {
+      return item.text.toLowerCase().includes(query.toLowerCase());
+    });
+  }, [items, query]);
 
   function onSubmit(e) {
     e.preventDefault();
 
     const value = inputRef.current.value;
-
     if (value === '') return;
-
     setItems((prev) => {
       const newItem = {
         id: uuidv4(),
@@ -26,28 +31,6 @@ export default function App() {
     inputRef.current.value = '';
   }
 
-  function onChange(e) {
-    const value = e.target.value;
-
-    // setItems((prev) => {
-    //   return prev.filter((item) => {
-    //     return item.text.toLowerCase().includes(value.toLowerCase());
-    //   });
-    // });
-
-    {
-      /* writeing the above code in only
-    one statement, remove the curly braces and 
-  return keyword */
-    }
-
-    setItems((prev) =>
-      prev.filter((item) =>
-        item.text.toLowerCase().includes(value.toLowerCase())
-      )
-    );
-  }
-
   return (
     <div className='bg-zinc-900 min-h-dvh flex items-center justify-center'>
       <div className='bg-stone-200 max-w-[350px] mx-2 flex flex-col gap-2 px-8 py-16 rounded-lg'>
@@ -55,7 +38,8 @@ export default function App() {
         <div>
           <label htmlFor='search'>Search:</label>{' '}
           <input
-            onChange={onChange}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
             type='search'
             id='search'
             autoComplete='off'
@@ -82,13 +66,11 @@ export default function App() {
           </button>
         </form>
         <h3>Items:</h3>
-        {items.length === 0 ? (
-          <p className='text-violet-500'>
-            There is no item in your list, Please add some item.
-          </p>
+        {!filteredItems.length ? (
+          <p className='text-violet-500'>No item</p>
         ) : (
           <ul className='flex flex-wrap gap-2'>
-            {items.map((item) => (
+            {filteredItems.map((item) => (
               <li
                 key={item.id}
                 className='bg-blue-800 text-white px-3 py-2 rounded-full '
